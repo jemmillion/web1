@@ -1,0 +1,126 @@
+데이타의 전송은 전송되어질 데이터 타입이 
+기본형 타입(boolean, char, byte, short, int, long, float, double)이든,
+객체타입이든 뭐건간에 결국 바이트의 흐름으로 전송하게 된다. 
+저장도 마찬가지로 바이트의 흐름으로 저장하게 된다.
+
+그러므로 자바에서는 클래스 객체 안에 저장되어 있는 데이터를 파일로 저장하거나,
+또는 네트워크를 통하여 클래스 객체 안에 저장되어 있는 데이터를 다른 곳으로 전송하려면 
+객체를 바이트 형태로 일일이 분해해야 한다. 
+이와 같이 객체를 바이트로 변환하는 작업을 "직렬화(Serialization)"라고 부른다.
+(다시말해서, 메모리 Heap에 위치한 객체를 출력이 가능한 상태(output이 가능한 상태)인 바이트 단위로 분해하여 
+ 한 줄로 늘어선 바이트의 형태로 만드는 작업을 "직렬화(Serialization)" 이라고 부른다.)
+바이트 단위로 분해되어 한줄로 늘어선 데이터를 다시 객체로 복원하는 작업을 "역직렬화" 라고 부른다.
+
+자바에서는 클래스 생성시 Serializable 인터페이스만 구현해주면 
+JVM 이 알아서 해당 클래스를 직렬화를 해주기 때문에 
+단지 implements Serializable 만 추가해주면 된다.
+
+네트워크를 통해 바이트 단위로 전송되어진 데이터(직렬화된 것) 또는 
+바이트 단위로 파일에 저장되어진 데이터(직렬화된 것)를 읽어다가 그 객체타입으로 변환(역직렬화)하여 
+다시 읽었을 때 그 객체의 자료구조가 변경되지 않은채 그대로 보존되어 읽어와야만 한다.
+
+모든 Class는 UID를 가지고 있는데 Class의 내용이 변경되면 UID값 역시 같이 바뀌어 버린다. 
+그러므로 어떤 두개의 Class가 내용물은 같더라도 Class는 UID 값이 바뀌게 되면 서로 다른 Class로 인식을 해버리게 된다.
+어떤 객체를 직렬화하여 데이터를 전송하고, 직렬화되어 전송되어진 데이터를 역직렬화(파일이나 네트워크로 부터 데이터를 읽어들여 다시 클래스화 하는것) 하여 
+객체의 정보를 읽어올 경우 역직렬화 되어지는 클래스 객체의 UID값과 직렬화하여 전송되어졌던 클래스의 UID값을 비교하여
+UID 값이 동일하면 해당 클래스의 객체가 올바른것으로 인식을 하고, 
+UID 값이 일치하지 않으면 해당 클래스의 객체가 올바르지 않은 것으로 하게 된다.
+이러한 사태를 미리 방지하기 위해 클래스 생성시 UID 값이 변경되지 않도록 고유값으로 미리 명시를 해주는 부분이 
+바로 "private static final long serialVersionUID" 이 부분이다.
+serialVersionUID 이란? -- serialVersionUID 는 직렬화에 사용되는 고유 아이디이다.
+
+객체의 직렬화를 위하여 객체를 직접 입출력 할 수 있도록 해주는 객체 스트림이 
+ObjectInputStream , ObjectOutputStream 이다.
+
+객체의 직렬화가 필요한 클래스는 java.io.패키지 클래스, Swing 에서 사용되는 클래스, 애플릿, 서블릿 이다.
+
+
+1. 객체 전송의 단계
+
+객체를 분해하여 전송하기 위해서는 직렬화(Serialization) 되어야 한다.
+
+객체를 전송하기 위해서는 3가지 단계를 거친다.
+
+(1) 직렬화된 객체를 바이트 단위로 분해한다. (marshalling)
+(2) 직렬화 되어 분해된 데이터를 순서에 따라 전송한다.
+(3) 전송 받은 데이터를 원래대로 복구한다. (unmarshalling)
+
+
+2. 마샬링 (marshalling)
+
+마샬링(marshalling)은 데이터를 바이트의 덩어리로 만들어 스트림에 보낼 수 있는 형태로 바꾸는 변환 작업을 뜻한다.
+자바에서 마샬링을 적용할 수 있는 데이터는 원시 자료형(boolean, char, byte, short, int, long, float, double)와 
+객체 중에서 Serializable 인터페이스를 구현한 클래스로 만들어진 객체이다.
+
+객체는 원시 자료형과 달리 일정한 크기를 가지지 않고 
+객체 내부의 멤버 변수가 다르기 때문에 크기가 천차만별로 달라진다. 
+이런 문제점을 처리할 수 있는게 ObjectOutputStream 클래스이다.
+
+
+3. 직렬화 (Serializable)
+
+마샬링으로 바이트로 분해된 객체는 스트림을 통해서 나갈 수 있는 준비가 되었다. 
+앞에서 언급한대로 객체를 마샬링하기 위해서는 Serializable 인터페이스를 구현한 클래스로 만들어진 객체에 한해서만 마샬링이 진행될 수 있다.
+
+Serializable 인터페이스는 아무런 메소드가 없고 
+단순히 자바 버추얼 머신에게 Serializable 되었다는 정보를 전달하는 의미만을 가진다.
+
+
+* 직렬화가 가능한 객체의 조건
+
+(1) 기본형 타입(boolean, char, byte, short, int, long, float, double)은 직렬화가 가능
+(2) Serializable 인터페이스를 구현한 객체여야 한다. (Vector 클래스는 Serializable 인터페이스로 구현됨)
+(3) 해당 객체의 멤버들 중에 Serializable 인터페이스가 구현되지 않은게 존재하면 안된다.
+(4) transient 가 사용된 멤버는 전송되지 않는다. (보안 변수 : null 전송)
+
+
+>>> serialVersionUID Warning 해결하기 <<<
+
+The serializable class 클래스명 does not declare a static final serialVersionUID field of type long
+
+serialVersionUID 이란? 
+-- serialVersionUID 는 직렬화에 사용되는 고유 아이디이다.
+
+
+자바에서는 클래스 생성시 Serializable 인터페이스만 구현해주면 
+JVM 이 알아서 직렬화를 해주기 때문에 단지 implements Serializable 만 추가해주면 된다.
+
+즉, 프로그래머가 serialVersionUID를 지정해주지 않아도 실행시점에서 JVM이 디폴트 serialVersionUID 값을 자동생성 해준다.
+그 알고리즘은 Java(TM) Object Serialization Specification 정의된 것을 따른다고 한다.
+한마디로 굳이 신경 쓸필요는 없다는 뜻이다.
+
+그런데, JDK 5.0 이후부터는 Serialzable 인터페이스를 구현한 클래스에서
+ static final long 타입의 serialVersionUID 상수를 선언하라는 경고문구를
+이클립스의 노란 warning 아이콘으로 확인 할 수 있고, 이클립스내에서 이 경고아이콘을 제외하도록 설정할 수도 있다.
+이렇게 Warning이 발생하더라도 동작하는데는 문제가 없다.
+ 
+그러나 serialization이 필요한 클래스에는 명시적으로 serialVersionUID를 선언해줄것을 강력하게 권유하고 있는데
+그 이유는 디폴트 serialVersionUID 계산은 클래스의 세부 사항을 매우 민감하게 반영하기 때문에 
+컴파일러 구현체에 따라서 달라질 수 있어 deserialization(serialization 했던 객체를 복구하는 과정)과정에서 
+예상하지 못한 InvalidClassExceptions을 유발할 수 있다. 라는 것이 그 이유란다.
+즉, 서로 다른 자바 컴파일러 구현체 사이에서도 동일한 serialVersionUID값을 얻기 위해서는 
+명시적으로 serialVersionUID값을 선언해야 하며, 가능한 serialVersionUID을 private static final 로 선언하라는 것이다.
+(상속되어 사용되어지는 것은 유용하지 않고, 해당 클래스에서만 사용되어지는 것이기 때문에....)
+
+
+>>> 이클립스 3.3 이후부터는 해당플러그인을 설치할 필요없이 
+    노란 Warning 경고 아이콘 부분을 클릭한 후 
+    add generated serial version UID 를 선택하면 UID가 자동생성된다.
+
+
+4. 언마샬링 (unmarshalling)
+
+언마샬링은 객체 스트림을 통해서 전달된 바이트 덩어리를 원래의 객체로 복구하는 작업이다. 이 작업을 제대로 수행하기 위해서는 반드시 어떤 객체 형태로 복구할지 형 변환을 정확하게 해주어야 한다.
+
+Vector v = (Vector)ois.readObject(); 
+// OutputInputStream의 객체를 읽어서 Vector 형으로 형변환 한다.
+
+이때 ObjectInputStream을 사용하여 데이터를 복구한다.
+
+
+
+http://seongilman.tistory.com/53
+
+http://blog.naver.com/zzooki/90021730904
+
+http://linuxism.tistory.com/1433
