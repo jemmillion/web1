@@ -52,9 +52,9 @@ public class TotalController {
 		do {
 			String loginId = (ldto == null)?" ":"["+ ldto.getAdminid() +"님 로그인 중..]"; 
 			String addMenu = (ldto == null)?"4. 나가기":"4. 도서정보등록     5. 개별도서등록\n"
-									                 + "6. 도서대여해주기      7. 대여중인도서조회     8. 도서반납해주기        9. 등록도서삭제        10.나가기"; 
+							+ "6. 도서대여해주기      7. 대여중인도서조회     8. 도서반납해주기        9. 등록도서삭제        10.나가기"; 
 	        
-	        System.out.println("\n===> 사서 전용 메뉴 "+loginId+"<===");
+	      		System.out.println("\n===> 사서 전용 메뉴 "+loginId+"<===");
 			System.out.println("1. 사서가입      2. 로그인      3. 로그아웃     "+addMenu);
 			System.out.print("=> 메뉴번호선택 : ");
 			
@@ -116,7 +116,7 @@ public class TotalController {
 			               break;
 			            }
 			            
-		            break;
+		        	    break;
 
 				case "5":
 					n = bookDetailNo(sc); // 개별도서등록
@@ -162,6 +162,7 @@ public class TotalController {
 
 
 // userMenu
+	
 	private void userMenu(Scanner sc) {       
          userDTO udto = null;
 
@@ -438,9 +439,6 @@ public class TotalController {
 	}// end of private void checkOut(Scanner sc)  -----------------------------------------------------
 	
 	
-	
-	
-	
 	// 대여중인 도서정보 조회
 	private void checkOutInfo(Scanner sc) {
 		System.out.println("\n=============================================================================================================================================================");
@@ -465,8 +463,6 @@ public class TotalController {
 		} 
 			
 	}// end of private void checkOutInfo() -----------------------------------------------------------------------
-	
-	
 	
 	
 	//도서반납하기
@@ -632,9 +628,7 @@ public class TotalController {
       
    }
     
-    
-    
-   
+  
    // ----- *** 일반회원 로그인 *** ----- 
     private userDTO userLogin(Scanner sc) {
        
@@ -664,10 +658,7 @@ public class TotalController {
          
    }//end of private userDTO userLogin(Scanner sc)--------
    
-    
-    
-    
-    
+  
     
    // ----- *** 일반회원 로그아웃 *** -----
     private userDTO userLogout() {
@@ -677,10 +668,7 @@ public class TotalController {
 	    return udto;
 	} //end of private void userLogout(userDTO user) --------------------
        
-    
-    
-    
-   
+
  // ----- *** 일반회원 도서검색 *** -----
     private void bookSearch(Scanner sc) {
 
@@ -716,8 +704,6 @@ public class TotalController {
 	   
         
    }
-    
-    
     
     
    // ----- *** 일반회원 도서대여현황 *** -----
@@ -816,5 +802,4 @@ public class TotalController {
 	
 }
 
-      
-      
+   
