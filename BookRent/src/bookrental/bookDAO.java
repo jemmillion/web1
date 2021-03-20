@@ -82,7 +82,7 @@ public class bookDAO implements interBookDAO {
 
 	
 	 /*
-	   // 개별 도서 등록(*조연재)
+	   // 개별 도서 등록
 	   @Override
 	   public int bookNoInfo(bookDTO book, Scanner sc) {
 	      int result=0;
@@ -146,7 +146,7 @@ public class bookDAO implements interBookDAO {
 	   }// end of int bookNoInfo(bookDTO book, Scanner sc)-----------------------
 	*/
 
-	// 개별 도서 등록(*김다님)
+	// 개별 도서 등록
 	public int registerBookid(bookDTO book, Scanner sc) {
 		
 		int result = 0;
