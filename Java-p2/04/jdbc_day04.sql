@@ -1,8 +1,3 @@
-set hidden param parseThreshold = 150000;
-
-show user;
--- USER이(가) "HR"입니다.
-
 ---- *** 회원 테이블 생성하기 *** ----
 select *
 from user_tables
