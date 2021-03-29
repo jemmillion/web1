@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>타이머 로그아웃</title>
+
+<style type="text/css">
+
+	div#container {
+	 /* border: solid 1px gray; */
+		width: 90%;
+		margin: 0 auto;
+		padding: 2%;
+	}
+	
+	table, tr, td {
+		border: solid 1px gray;
+		border-collapse: collapse;
+	}
+	
+	td {
+		width: 200px;
+		height: 50px;
+		text-align: center; 
+	}
+
+</style>
+
+<script type="text/javascript">
+
+    var start = 0;  // 타이머에 남은 시간 초의 용도(예 300초, 299초 , 298초 ... 0초) 
+    var cnt = 0;    // 증가치 
+    var clock;      
+
+	window.onload = function(){
+		
+		// java       이라면  299/100 => 2
+		// javascript 이라면  299/100 => 2.99 
+		// alert(299/100); // 2.99
+		
+		func_loopTimer();
+		
+		var btnDelay = document.getElementById("btnDelay");
+		
+		btnDelay.addEventListener('click', function(){
+			if(start < 0) {
+				alert("로그아웃 된 이후에는 시간연장이 불가합니다 .");
+			}
+			else {
+				cnt = 0;
+			}
+		});
+		
+		
+	}// end of window.onload = function(){}---------------
+	
+	
+	function func_timer(i) {
+		
+		start = 5*60 - i;
+		// 5분       (== 5*60 - 0 초) 만들기        start : 300 초  
+		// 4분59초(== 5*60 - 1 초) 만들기        start : 299 초 
+		// 4분58초(== 5*60 - 2 초) 만들기        start : 298 초 
+		// 4분57초(== 5*60 - 3 초) 만들기        start : 297 초 
+		// ............                   ...........  
+		// ............                   ...........
+		// 0분01초(== 5*60 - 299 초) 만들기     start : 1 초
+		// 0분00초(== 5*60 - 300 초) 만들기     start : 0  초
+		// 0분-1초(== 5*60 - 301 초) 만들기     start : -1  초 
+		
+		if(start >= 0) {
+			// 300 초를  05:00 으로 만든다.
+			// 299 초를  04:59 으로 만든다.
+			// 298 초를  04:58 으로 만든다.
+			// ....................
+			// 0 초를  00:00 으로 만든다.
+			
+			var minute = "";
+			
+			if(start < 600) {    // 10분 미만인 경우 
+		//  또는		
+		//	if(start/60 < 10) {  // 10분 미만인 경우 
+				
+				minute = "0";
+			}
+			
+			minute += parseInt(start/60); // 300 초를  05:00 으로 만든다.
+			                              // 299 초를  04:59 으로 만든다.
+		/*
+		    parseInt(5)                 ==> 5
+			parseInt(4.983333333333333) ==> 4
+		*/	
+		   
+		    var second = start%60; // start 를 60 으로 나눈 나머지 
+		    
+		    second = (second < 10)?"0"+second:second;
+		    
+		    document.getElementById("timer").innerHTML = minute + ":" + second;
+		
+		}
+		
+		else {
+			
+			alert("시간종료로 로그아웃 되었습니다.");
+			
+			// "연장" 버튼을 비활성화
+			document.getElementById("btnDelay").disabled = true;
+			
+			return; // 함수의 종료
+		}
+		
+	}// end of function func_timer(i)-------------------
+	
+	
+	function func_loopTimer() {
+		
+		func_timer(cnt++);  // func_timer(0); 호출하고 나서 cnt = 1;
+		                    // func_timer(1); 호출하고 나서 cnt = 2; 
+		                    // func_timer(2); 호출하고 나서 cnt = 3;
+		                    // func_timer(3); 호출하고 나서 cnt = 4;
+		                    // .................................
+		                    // func_timer(300); 호출하고 나서 cnt = 301; 
+		                    // func_timer(301); 호출하고 나서 cnt = 302; 
+		if(start >= 0) {                    
+			clock = setTimeout('func_loopTimer()' , 1000);
+			// 1000 밀리초(== 1초) 뒤에 func_loopTimer() 함수를 실행해라.
+		}
+		                    
+	}// end of function func_loopTimer()------------------
+
+	
+	
+	function func_Finish() {
+		
+		alert("강제 종료합니다.");
+		
+		document.getElementById("timer").innerHTML = "00:00";
+		
+		// "연장" 버튼을 비활성화
+		document.getElementById("btnDelay").disabled = true;
+		
+		// "연장" 버튼을 활성화
+		// document.getElementById("btnDelay").disabled = false;
+				
+		clearTimeout(clock);
+		// setTimeout 메서드에서 지정한 일정한 밀리초값 시간 이후에 실행할 표현식 javascriptCode나 기능함수 functionName을 호출하는 것을 중단한다.
+		// 파라미터 clock 은 중단해야할 setTimeout 함수를 가리키는 것임.
+		
+	}// end of function func_Finish()----------------------
+	
+</script>
+
+</head>
+<body>
+
+	<div id="container">
+		<table>
+			<tr>
+				<td>남은시간</td>
+				<td>
+					<span id="timer"></span>   <!-- 05:00  04:59  04:58  04:57 ... 00:03  00:02  00:01  00:00 -->
+					<button type="button" id="btnDelay">연장</button>  <!-- 05:00 --> 
+				</td>
+			</tr>
+			
+			<tr>
+				<td>강제종료</td>
+				<td>
+					<button type="button" onclick="func_Finish()">종료</button>  <!-- 00:00 -->
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>
