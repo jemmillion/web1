@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>문자열을 유효한 URI(Uniform Resource Identifier UTF-8로 인코딩)로 인코딩/디코드 한다.</title>
+
+<style type="text/css">
+   div#container {
+      /* border: solid 1px gray; */
+      width: 90%;
+      margin: 0 auto;
+      padding: 2%;
+   }
+
+   table, tr, td {
+      border: solid 1px gray;
+      border-collapse: collapse;
+   }
+   
+   td {
+      width: 200px;
+      height: 50px;
+      text-align: center; 
+   }
+</style>
+
+<script type="text/javascript">
+
+	window.onload = function(){
+		document.getElementById("inputText").focus(); // autofocus와 같음
+		
+		var btnOK = document.getElementById("btnOK");
+		
+		btnOK.addEventListener('click', function(){
+			var s_inputText = document.getElementById("inputText").value;
+			
+			var s_encodeVal = encodeURI(s_inputText);
+			// encodeURI("문자열"); ==> "문자열"을 UTF-8 로 변환시켜준다.
+			
+			document.getElementById("encode").innerHTML = s_encodeVal; 
+			
+			var s_decodeVal = decodeURI(s_encodeVal);
+			
+			document.getElementById("decode").innerHTML = s_decodeVal; 
+			// decodeURI("인코딩된값"); ==> "인코딩된값"을 원래의 글자로 되돌려 준다.
+		
+		});
+
+		var btnReset = document.getElementById("btnReset");
+
+		btnReset.addEventListener("click", function(){			
+			document.getElementById("inputText").value="";
+			document.getElementById("encode").innerHTML="";
+			document.getElementById("decode").innerHTML="";
+			document.getElementById("inputText").focus();
+		});			
+		
+	}// end of window.onload = function()--------------------------------------------------
+
+</script>
+
+</head>
+<body>
+   <div id="container">
+      <table>
+         <tr>
+            <td>문자열입력</td>
+            <td><input type="text" id="inputText" /> </td>
+         </tr>
+         <tr>
+            <td>URI로 인코딩된 값</td>
+            <td id="encode"></td>
+         </tr>
+         <tr>
+            <td>URI를 디코딩된 값</td>
+            <td id="decode"></td>
+         </tr>
+         
+         <tr>
+            <td><button type="button" id="btnOK">변경</button></td>
+            <td><button type="button" id="btnReset">다시</button></td>
+         </tr>
+      </table>
+   </div>
+
+</body>
+</html>
