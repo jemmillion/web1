@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>자바스크립트 폼 유효성 검사</title>
+<style type="text/css">
+	
+	body {
+   /*   border: solid 1px gray; */
+      margin: 0;
+      padding: 0; 
+      font-family: Arial, "MS Trebuchet", sans-serif;
+      word-break: break-all; /* 공백없이 영어로만 되어질 경우 해당구역을 빠져나가므로 이것을 막기위해서 사용한다. */
+   }
+   
+   #container {
+   /*   border: solid 1px blue; */
+      width: 80%;
+      margin: 0 auto;
+   }
+   
+   legend {
+      font-size: 20pt;
+   }
+   
+   ul {
+   /*   border: solid 1px red; */ 
+      list-style-type: none;
+      padding: 0;
+   }
+   
+   li {
+      line-height: 40px;
+   }
+
+	label.title{
+		display: inline-block;
+		width: 150px;
+		color: navy;
+		font-weight: bold;
+	}
+	
+	input.myinput {
+		height: 20px;
+	}
+	
+	select{
+		width: 200px;
+	}
+	
+	select.myselect{
+		height: 25px;
+	}
+	
+	input[type=submit], input[type=reset], input[type=button] {
+		width: 150px;
+		height: 40px;
+		background-color: #000;
+		color: #fff;
+		font-size: 16pt;
+		margin: 20px 0 0 40px;
+		border: none;
+	}
+	
+</style>
+
+<script type="text/javascript">
+
+	window.onload=function(){
+		
+		var now = new Date(); // 자바스크립트에서 현재날짜시각을 알려주는 객체
+		var currentYear = now.getFullYear(); // 현재년도
+		
+		var html = "<option>출생년도</option>";
+		
+		for(var i=0; i<(currentYear-1950+1); i++){
+			
+			html+="<option>"+(1950+i)+"</option>"
+			
+		}// end of for-----------------------------------------------------------
+		
+		document.getElementById("birthYear").innerHTML = html;
+		
+		// 이벤트 소스(select 태그)
+		var birthYear = document.getElementById("birthYear");
+			
+		/*
+		birthYear.onchange = function(){
+			
+		}
+		*/
+		// 또는
+		birthYear.addEventListener('change', function(){
+		/*
+			console.log(this.value);
+			console.log(typeof(this.value));
+			
+			console.log("------------------------------------");
+			
+			console.log(Number(this.value));
+			console.log(typeof(Number(this.value)));
+			
+			console.log("------------------------------------");
+			
+			console.log("isNaN(500) => "+isNaN(500));		
+			// isNaN(500) => false
+			// NaN==>Not A Number
+			// isNaN ==> 값이 숫자라면 false
+			// isNaN ==> 값이 숫자가 아니라면 true, 즉 NaN 이라면 true
+			
+			console.log("isNaN('이순신') => "+isNaN('이순신'));
+			// isNaN('이순신') => true
+		*/
+			// 나이구하기
+			var byear = Number(this.value);
+			if( isNaN(byear) ){
+				// this.value 가 "출생년도" 인 경우이다.
+				alert("테어나신 년도를 선택하세요");
+				document.getElementById("age").innerHTML = "";
+			}
+			else{
+				// this.value 가 "출생년도"가 아닌 나머지 숫자년도를 선택한 경우이다.
+				document.getElementById("age").innerHTML = currentYear - byear + 1;
+			}
+		});
+	}// end of window.onload=function()----------------------------------
+
+	//function Declaration
+		function goOK(){
+			
+			var frm = document.registerForm;
+			// 문서에서 name의 값이 registerForm인 엘리먼트(태그)를 잡는 것이다.
+			
+			// 1. 사용자 ID는 필수 입력사항이므로 반드시 값을 입력해야 한다.
+			var useridVal = frm.userid.value; // frm 태그에서 name이 userid인 엘리먼트
+			// console.log("확인용 아이디: "+useridVal);
+			
+			if(useridVal.trim().length == 0){ // 아이디 값이 글자가 없거나 공백만으로 이루어진 경우라면
+				alert("아이디는 필수 입력사항 입니다. 아이디를 입력하세요!!");
+				frm.userid.value="";
+				frm.userid.focus();
+				return; // goOK() 함수를 종료시킨다.
+			}
+
+			// 2. 암호는 필수 입력사항이므로 반드시 값을 입력해야 한다.
+			var passwdVal = frm.passwd.value; // frm 태그에서 name이 passwd인 엘리먼트
+			
+			if(passwdVal.trim().length == 0){ 
+				alert("암호는 필수 입력사항 입니다. 암호를 입력하세요!!");
+				frm.passwd.value="";
+				frm.passwd.focus();
+				return; // goOK() 함수를 종료시킨다.
+			}
+
+			// 3. 암호 입력란과 암호확인 입력란의 데이터가 동일한지 아닌지 검사하기 
+			var passwd2Val = document.getElementById("passwd2").value; // frm 태그에서 name이 passwd인 엘리먼트
+			
+			if(passwdVal != passwd2Val){ 
+				alert("암호와 암호확인 값이 서로 다릅니다!!");
+				frm.passwd.value="";
+				frm.passwd.focus();
+				document.getElementById("passwd2").value = "";
+				return; // goOK() 함수를 종료시킨다.
+			}
+			
+			// 4. 성명은 필수 입력사항이므로 반드시 값을 입력해야 한다.
+			var nameVal = frm.name.value; // frm 태그에서 name이 passwd인 엘리먼트
+			
+			if(nameVal.trim().length == 0){ 
+				alert("성명은 필수 입력사항 입니다. 성명을 입력하세요!!");
+				frm.name.value="";
+				frm.name.focus();
+				return; // goOK() 함수를 종료시킨다.
+			}	
+
+			// 5. 이메일은 필수 입력사항이므로 반드시 값을 입력해야 한다.
+			var emailVal = frm.email.value; // frm 태그에서 name이 passwd인 엘리먼트
+			
+			if(emailVal.trim().length == 0){ 
+				alert("이메일은 필수 입력사항 입니다. 이메일을 입력하세요!!");
+				frm.email.value="";
+				frm.email.focus();
+				return; // goOK() 함수를 종료시킨다.
+			}	
+			
+			// 6. 성별을 선택했는지 검사하기(라디오에서 선택했는지 안했는지 검사하는 것임)
+			var arrGender = frm.gender;
+			// frm.gender 는 name이 gender 인 것으로써, 즉 input 태그중 type 이 radio를 가리키는 것이다.
+			
+			// == 첫번째 방법 ==
+			var cnt=0;
+			
+			for(var i=0; i<arrGender.length; i++){
+				var bool = arrGender[i].checked;
+				// arrGender[i] 은 input 태그중 type 이 radio를 가리키는 것
+		        // 라디오에서 체크가 되어진 상태이라면 checked 속성값은 true 이고,
+		        // 라디오에서 체크가 안 되어진 상태이라면 checked 속성값은 false 이다.
+		        
+		        if(!bool){
+		        	// radio를 선택하지 않았으면
+		        	cnt++;
+		        }
+			}// end of for------------------------------------------------
+			
+			if(cnt==arrGender.length){
+				alert("성별을 선택하세요!!");
+				return;
+			}
+			
+			// == 두번째 방법 ==
+			
+			for(var i=0; i<arrGender.length; i++){
+				var bool = arrGender[i].checked;
+				
+				if(bool){
+					// radio 를 선택했으면
+					bFlag=true;
+					break;
+				}
+			}	// end of for------------------------------------------------
+			
+			if(!bFlag){
+				alert("성별을 선택하세요 ~~~~")
+				return;
+			}
+			
+			// 7. 취미를 2개 이상 선택했는지 검사하기(체크박스에서 선택했는지 안했는지 검사하는 것임)
+			var arrHobby = frm.hobby;
+			
+			var cnt = 0;
+			for(var i=0; i<arrHobby.length; i++){
+				if( arrHobby[i].checked ){
+					cnt++;
+				}
+			}// end of for---------------------------------------------------------------------------------
+			
+			if(cnt<2){
+				alert("취미는 최소한 2개 이상 선택하셔야 합니다.");
+				return;
+			}
+			
+			// 8. 출생년도를 선택했는지 검사하기
+			
+			var sBirthYear = document.getElementById("birthYear").value;
+			
+	//		console.log(isNaN(sBirthYear));
+			// isNaN(sBirthYear) 은 sBirthYear 값이 숫자로 되어 있으면 false
+			// isNaN(sBirthYear) 은 sBirthYear 값이 숫자로 되어 있지 않으면 true
+			
+			if(isNaN(sBirthYear)){
+				alert("출생년도를 올바르게 선택하세요!!");
+				return;
+			}
+			
+			// 9. 최종학력을 선택했는지 검사하기
+			var sSchoolVal = frm.school.value;	
+	//		console.log("최종학력 : "+sSchoolVal);
+	
+			if(sSchoolVal == ""){
+				alert("최종학력을 선택하세요!!");
+				return;
+			}
+			
+			// 10. 가입인사를 입력했는지 검사하기
+			var sregisterCommentVal = frm.registerComment.value;
+			
+			if(sRegisterCommentVal.trim() == ""){
+				alert("가입인사말을 입력하세요!!");
+				frm.sRegisterComment.value = "";
+				frm.sRegisterComment.focus();
+				return;
+			}
+			
+			// 폼 전송하기
+			frm.submit();
+				
+	} // end of function goOK()-------------------------------------------------------------------------
+	
+</script>
+
+
+</head>
+<body>
+	<div id="container">
+		
+		<form name="registerForm" action="register.do">
+		
+		<!-- fieldset 태그는 폼을 그룹핑(묶어주는것)하는 역할  -->
+		<fieldset>
+		
+			<!-- legend 태그는 fieldset 에 대한 제목을 지정하는 것이다. --> 
+			<legend>회원가입정보</legend>
+			
+			<ul>
+				<li>
+					<label class="title">아이디</label>
+					<input type="text" class="myinput" id="userid" size="20" maxlength="20" autofocus required autocomplete="off"/>
+				</li>
+				
+				<li>
+					<label class="title">암호</label>
+					<input type="password" class="myinput" id="passwd1" size="20" maxlength="20" required />
+				</li>
+				
+				<li>
+					<label class="title">암호 확인</label>
+					<input type="password" class="myinput" id="passwd2" size="20" maxlength="20" required />
+				</li>
+				
+				<li>
+					<label class="title">성명</label>
+					<input type="text" class="myinput" id="name" size="20" maxlength="20" required />				
+				</li>
+				
+				<li>
+					<label class="title">이메일</label>
+					<input type="text" class="myinput" id="email" size="20" maxlength="20" required placeholder="예: imjotj@naver.com" />		
+				</li>
+				
+				<li>	
+					<label class="title">성별</label>
+					<label for="male">남자 </label><input type="radio" name="gender" id="male" />
+					<label for="female">여자 </label><input type="radio" name="gender" id="female" checked />
+				</li>
+				
+				<li>
+					<label class="title">취미(2개 이상 선택)</label>
+					<label for="hobby1">게임</label><input type="checkbox" id="hobby1" name="hobby"/> &nbsp;&nbsp;
+					<label for="hobby2">영화감상</label><input type="checkbox" id="hobby2" name="hobby"/> &nbsp;&nbsp;
+					<label for="hobby3">글쓰기</label><input type="checkbox" id="hobby3" name="hobby"/> &nbsp;&nbsp;
+					<label for="hobby4">음악감상</label><input type="checkbox" id="hobb4" name="hobby"/> &nbsp;&nbsp;
+				</li>
+				
+				<li>
+					<label class="title">출생년도</label>
+					<select id="birthYear" class="myselect"></select>
+				</li>
+				
+				<li>
+					<label class="title">현재나이</label>
+					<span id="age" style="font-size: 12pt; color:red;"></span>세
+				</li>
+				
+				<li>
+					<label class="title">최종학력</label>
+					<select class="myselect">
+			   <!--	<option>학력선택</option>
+						<option>고졸</option>
+						<option>초대졸</option>
+						<option>대졸</option>
+						<option>대학원졸</option> -->
+				     	<option value="">학력선택</option>
+						<option value="1">고졸</option>
+						<option value="2">초대졸</option>
+						<option value="3">대졸</option>
+						<option value="4">대학원졸</option>
+					</select>
+					<!-- select는 길이를 지정하지 않을 경우 가장 긴 문자열의 길이와 같아진다. -->
+				</li>
+				
+				<li> 
+					<label class="title">선호음식</label>
+					<select size="3" multiple> <!-- multiple은 복수개 선택 가능하다는 뜻 -->
+						<option>짜장면</option>
+						<option>파스타</option>
+						<option>팟타이</option>
+						<option>부대찌게</option>
+						<option>떡볶이</option>
+						<option>치킨</option>
+					</select>
+				</li>
+
+				<li>
+					<label class="title">선호프로그램</label>
+					<select class="myselect">
+						<optgroup label="데이터베이스">
+							<option>Oracle</option>
+							<option>MSSQL</option>
+							<option>SyBase</option>
+						</optgroup>
+						<optgroup label="개발언어">
+							<option>Java</option>
+							<option>JSP</option>
+							<option>Spring</option>
+							<option>C/C++</option>
+						</optgroup>
+					</select>	
+				</li>
+				
+				<li>
+					<label class="title" for="browsername">웹브라우저</label>
+					<input id="browsername " list="briwserType" />
+					<datalist id="browsweType">
+						<option value="Chrome" ></option>
+						<option value="Firefox" ></option>
+						<option value="Internet Explorer" ></option>
+						<option value="Firefox" ></option>
+						<option value="Safari" ></option>
+					</datalist>
+				</li>
+				
+				<li>
+					<label class="title" for="addFile">파일첨부</label>
+					<input type="file" id="addFile" />
+				
+				</li>
+				
+				<li>
+					<label class="title" for="registerComment">가입인사말</label>
+					<textarea rows="5" cols="30" id="registerComment" name="registerComment"></textarea>
+				</li>
+				
+				<li>
+					<!-- type="submit" 일때는 태그에 required가 작동하는데,
+						   type="button" 일때는 태그에 required가 작동하지 않는다.	 -->
+					<input type="submit" value="확인(submit)" />
+					<input type="button" value="확인(button)" onclick="goOK()" />
+					<input type="reset" value="취소" />	
+				</li>
+				
+			</ul>
+		</fieldset>
+		</form>
+		
+	</div>
+	
+</body>
+</html>
