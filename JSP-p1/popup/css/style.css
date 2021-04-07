@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+#underline {
+	color: blue;
+	text-decoration: underline;
+}
+
+table {
+	width: 50%;
+}
+
+table, td {
+	border: solid 1px gray;
+	border-collapse: collapse;
+	padding: 3%;
+}
+
+img.productimg {
+	width: 50px;
+	height: 50px;
+	cursor: pointer;
+}
+
+.productname {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.productprice {
+	font-size: 14pt;
+	color: blue;	
+}
+
+.choice {
+	font-size: 14pt;
+}
+
+.money {
+	font-size: 14pt;
+	color: navy;
+	font-weight: bold;
+}
+
+#orderPrice {
+	text-align: right;
+	font-size: 14pt;
+	color: maroon;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
