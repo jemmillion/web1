@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>event.target 및 unbind에 대해서 알아봅니다</title>
+
+<style type="text/css">
+	
+	div#firstdiv, div#result {
+      /* border: solid 1px gray;  */
+      
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+   }
+   
+   div#result {
+      margin: 20px 0 0 0;
+      padding-left: 100px;
+      font-size: 16pt;
+   }
+   
+
+   span.buttons {
+      display: inline-block;
+      border: solid 2px orange;
+      width: 100px;
+      margin: 20px;
+      padding: 5px;
+      background-color: yellow;
+      color: #ff0000;
+      font-size: 15pt;
+      cursor: pointer;
+   }
+      
+</style>
+
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("div#result").hide();
+		
+		$("span.buttons").bind("click", function(){
+			
+			var $target = $(event.target);
+			// $(event.target); 은 이벤트(지금은 click)가 발생되어진 엘리먼트를 말한다.
+			
+			//console.log("확인용 : "+$target.text() );
+			
+			// 엘리먼트와 엘리먼트가 같은지 다른지 비교할때 is 를 사용한다.
+            // 선택자1.is(선택자2) 은 선택자1과 선택자2가 동일한 엘리먼트를 가리키는 것이라면 true 이고, 
+            // 선택자1.is(선택자2) 은 선택자1과 선택자2가 동일한 엘리먼트를 가리키는 것이 아니라면 false 이다
+            if( $target.is("span.lucky")){
+            	// alert("4번은 클릭하셨군요");
+            	
+            	var html = "<span style='color: blue';> 당첨!! 축하합니다!!</span>";
+            	$("div#result").html(html);
+            	$("div#result").show();
+            }
+			
+            $("div#result").show();
+            
+            $("span.buttons").unbind("click");
+            // 선택자 $("span.buttons") 에 대해 click 이벤트가 발생하지 않도록 한다.
+
+		});
+	});
+</script>
+
+</head>
+<body>
+
+   <h2>행운의 숫자를 클릭하세요~~(오로지 기회는 1번만!!)</h2>
+   <div id="firstdiv">
+      <span class="buttons">1</span>
+      <span class="buttons">2</span>
+      <span class="buttons">3</span>
+      <span class="buttons lucky">4</span>
+      <span class="buttons">5</span>
+   </div>
+   <div id="result">다음기회에...</div>   
+
+</body>
+</html>
