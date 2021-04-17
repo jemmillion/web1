@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>인물 사진 보이기/감추기( mouseover , mouseout , 선택자.attr("속성") , 선택자.prop("속성") )</title>
+
+<style type="text/css">
+
+	div#container {
+		/* border: solid 1px gray; */
+		width: 80%;
+		margin: 0 auto;
+	}	
+	
+	span.buttons {
+		display: inline-block;
+		width: 100px;
+		border: solid 2px orange;
+		background-color: yellow;
+		color: #ff0000;
+		font-size: 15pt;
+		cursor: pointer;
+		margin: 20px;
+		padding: 5px;
+	}
+	
+	div#comment {
+	 /* border: solid 1px gray; */ 
+		width: 250px;
+		margin-top: 10px;
+	}
+	
+	div#face > img {
+		width: 119px;
+		height: 149px;
+		border-radius: 50%; 
+	}
+
+</style>
+
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script> 
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		var arrPerson = [{name:"김태희", filename:"kimth.jpg", address:"서울 강동구", email:"kimth@gmail.com"}  
+                        ,{name:"아이유", filename:"iyou.jpg", address:"서울 강서구", email:"iyou@gmail.com"}
+                        ,{name:"박보영", filename:"parkby.jpg", address:"서울 강남구", email:"parkby@gmail.com"}];
+		
+		var html = "";
+		
+		arrPerson.forEach(function(item, index){
+			html += "<span class='buttons' id='"+index+"'>"+ item.name +"</span>";
+		}); // end of arrPerson.forEach(function(item){})---------
+		
+		$("div#firstdiv").html(html);
+		
+	/*	
+		$("span.buttons").bind("mouseover", function(){
+			console.log("확인용");
+		});
+	*/
+		// 또는
+		$("span.buttons").mouseover(function(){ 
+			// 선택자.mouseover(function(event){}); 은 선택자에서 마우스 포인터가 올라가기만 하면 발생되는 이벤트이다. 
+			
+			// console.log("확인용2");
+			
+			var $target = $(event.target);
+		//	console.log("확인용 : " + $target.text());
+		
+			/*
+			   ==== 선택자의 class 명 알아오기 ===== 
+				   선택자.attr('class') 또는 선택자.prop('class')
+			*/
+			// console.log("선택자의 class 명 알아오기 : " + $target.attr('class') );
+			
+			/*
+			   ==== 선택자의 id 명 알아오기 ===== 
+				   선택자.attr('id') 또는 선택자.prop('id')
+			*/
+			// console.log("선택자의 id 명 알아오기 : " + $target.prop('id') );
+			
+			/*
+			   ==== 선택자의 name 명 알아오기 ===== 
+				   선택자.attr('name') 또는 선택자.prop('name')
+			*/
+			
+			var i = Number($target.attr('id'));
+		//	console.log("확인용 이미지 파일명 : " + arrPerson[i].filename); 
+			// 확인용 이미지 파일명 : kimth.jpg
+			// 확인용 이미지 파일명 : iyou.jpg
+			// 확인용 이미지 파일명 : parkby.jpg
+			
+			$("div#face").html("<img src='images/"+arrPerson[i].filename+"' />");
+		
+			html = "<ol>" +
+				          "<li>성명 :&nbsp;"+arrPerson[i].name+"</li>"+
+				          "<li>주소 :&nbsp;"+arrPerson[i].address+"</li>"+
+				          "<li>e메일 :&nbsp;"+arrPerson[i].email+"</li>"+
+				       "</ol>";
+			       
+			$("div#comment").html(html);
+			
+			$target.css({'background-color':'navy', 'color':'white'});
+			
+			$("div#seconddiv").show();
+			
+		});// end of $("span.buttons").mouseover(function(){});------------
+		
+		
+		$("span.buttons").mouseout(function(){ 
+			var $target = $(event.target); 
+			// 마우스가 올라가 있다가 빠져 나오는 엘리먼트 
+			
+			$target.css({'background-color':'yellow', 'color':'#ff0000'});
+			
+			$("div#seconddiv").hide();
+		});// end of $("span.buttons").mouseout(function(){});-------  
+		
+		
+	});// end of $(document).ready(function(){})------------------
+
+</script>
+
+</head>
+<body>
+
+	<div id="container" align="center">
+		<div id="firstdiv"></div>
+		
+		<div id="seconddiv">
+			<div id="face"></div>
+			<div id="comment" align="left"></div>
+		</div>
+	</div>	
+
+</body>
+</html>

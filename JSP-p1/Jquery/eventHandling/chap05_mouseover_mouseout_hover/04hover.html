@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>인물 사진 보이기/감추기( hover )</title>
+<!-- hover 는 이벤트가 아니라 jQuery 에서 제공해주는 함수(메소드)인데 mouseover 와 mouseout 을 합친것이다.  -->
+<style type="text/css">
+
+	div#container {
+		/* border: solid 1px gray; */
+		width: 80%;
+		margin: 0 auto;
+	}	
+	
+	span.buttons {
+		display: inline-block;
+		width: 100px;
+		border: solid 2px orange;
+		background-color: yellow;
+		color: #ff0000;
+		font-size: 15pt;
+		cursor: pointer;
+		margin: 20px;
+		padding: 5px;
+	}
+	
+	div#comment {
+	 /* border: solid 1px gray; */ 
+		width: 250px;
+		margin-top: 10px;
+	}
+	
+	div#face > img {
+		width: 119px;
+		height: 149px;
+		border-radius: 50%; 
+	}
+
+</style>
+
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script> 
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		var arrPerson = [{name:"김태희", filename:"kimth.jpg", address:"서울 강동구", email:"kimth@gmail.com"}  
+		                        ,{name:"아이유", filename:"iyou.jpg", address:"서울 강서구", email:"iyou@gmail.com"}
+		                        ,{name:"박보영", filename:"parkby.jpg", address:"서울 강남구", email:"parkby@gmail.com"}];
+				
+		var html = "";
+		
+		arrPerson.forEach(function(item){
+			html += "<span class='buttons' id='"+index+"'>"+ item.name +"</span>";
+		}); // end of arrPerson.forEach(function(item){})---------
+		
+		$("div#firstdiv").html(html);
+	
+		/*
+        선택자.hover(function(){} , fuction(){}); 
+		     ==> 첫번째 function(){} 은 mouseover 에 해당하는 내용을 기재하는 것이고,
+		               두번째 fuction(){} 은 mouseout 에 해당하는 내용을 기재하는 것이다.
+		*/
+		  
+		  /*   
+		      $(".buttons").bind("hover", function(event){}); 은 에러이다.
+		            왜냐하면 hover 는 이벤트가 아니라 jQuery 에서 제공해주는 함수(메소드)
+		  */  
+		
+		  $("span.buttons").hover(function(){
+						var $target = $(event.target);
+						//	console.log("확인용 : " + $target.text());
+						
+						var i = $target.index();
+						// $target.index() 은 $("span.buttons") 중에서 현재 마우스가 올라간 곳의 배열요소의 인덱스값을 알려주는 것이다.
+					
+						console.log("확인용 이미지 파일명 : " + arrPerson[$target.index()].filename); 
+						// $target.index() 은 $("span.buttons") 중에서 현재 마우스가 올라간 곳의 배열요소의 인덱스값을 알려주는 것이다.
+						// 확인용 이미지 파일명 : kimth.jpg
+						// 확인용 이미지 파일명 : iyou.jpg
+						// 확인용 이미지 파일명 : parkby.jpg
+						
+						$("div#face").html("<img src='images/"+arrPerson[i].filename+"' />");
+					
+						html = "<ol>" +
+							          "<li>성명 :&nbsp;"+arrPerson[i].name+"</li>"+
+							          "<li>주소 :&nbsp;"+arrPerson[i].address+"</li>"+
+							          "<li>e메일 :&nbsp;"+arrPerson[i].email+"</li>"+
+							       "</ol>";
+						       
+						$("div#comment").html(html);
+						
+						$target.css({'background-color':'navy', 'color':'white'});
+						
+						$("div#seconddiv").show(); 
+						}, 
+						function(){
+							var $target = $(event.target); 
+							// 마우스가 올라가 있다가 빠져 나오는 엘리먼트 
+							
+							$target.css({'background-color':'yellow', 'color':'#ff0000'});
+							
+							$("div#seconddiv").hide();							  
+						 });
+																  
+		  
+	});// end of $(document).ready(function(){})------------------
+
+</script>
+
+</head>
+<body>
+
+	<div id="container" align="center">
+		<div id="firstdiv"></div>
+		
+		<div id="seconddiv">
+			<div id="face"></div>
+			<div id="comment" align="left"></div>
+		</div>
+	</div>	
+
+</body>
+</html>
