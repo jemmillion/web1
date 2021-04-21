@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>인물 사진 보이기/감추기 (css, addClass, removeClass) 및 $(document).on()에 대해서 알아본다.</title>
+<style type="text/css">
+
+	div#container {
+		/* border: solid 1px gray; */
+		width: 80%;
+		margin: 0 auto;
+	}	
+	
+	span.buttons {
+		display: inline-block;
+		width: 100px;
+		border: solid 2px orange;
+		background-color: yellow;
+		color: #ff0000;
+		font-size: 15pt;
+		cursor: pointer;
+		margin: 20px;
+		padding: 5px;
+	}
+	
+	div#comment {
+	 /* border: solid 1px gray; */ 
+		width: 250px;
+		margin-top: 10px;
+	}
+	
+	div#face > img {
+		width: 119px;
+		height: 149px;
+	}
+	
+	.image_custom{
+		border-radius: 50%; 
+	}
+
+</style>
+
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script> 
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		var arrPerson = [{name:"김태희", filename:"kimth.jpg", address:"서울 강동구", email:"kimth@gmail.com"}  
+							      ,{name:"아이유", filename:"iyou.jpg", address:"서울 강서구", email:"iyou@gmail.com"}
+							      ,{name:"박보영", filename:"parkby.jpg", address:"서울 강남구", email:"parkby@gmail.com"}];
+
+		var html = "";
+		
+		arrPerson.forEach(function(item){
+			html += "<span class='buttons'>"+ item.name +"</span>";
+		}); // end of arrPerson.forEach(function(item){})---------
+		
+		$("div#firstdiv").html(html);
+		
+		/*
+        선택자.hover(function(){} , fuction(){}); 
+		     ==> 첫번째 function(){} 은 mouseover 에 해당하는 내용을 기재하는 것이고,
+		               두번째 fuction(){} 은 mouseout 에 해당하는 내용을 기재하는 것이다.
+		*/
+		  
+		  /*   
+		      $(".buttons").bind("hover", function(event){}); 은 에러이다.
+		            왜냐하면 hover 는 이벤트가 아니라 jQuery 에서 제공해주는 함수(메소드)
+		  */  
+		
+		  $("span.buttons").hover(function(){
+			  
+				var $target = $(event.target);
+				//	console.log("확인용 : " + $target.text());
+				
+				var i = $target.index();
+				// $target.index() 은 $("span.buttons") 중에서 현재 마우스가 올라간 곳의 배열요소의 인덱스값을 알려주는 것이다.
+			
+				console.log("확인용 이미지 파일명 : " + arrPerson[$target.index()].filename); 
+				// $target.index() 은 $("span.buttons") 중에서 현재 마우스가 올라간 곳의 배열요소의 인덱스값을 알려주는 것이다.
+				// 확인용 이미지 파일명 : kimth.jpg
+				// 확인용 이미지 파일명 : iyou.jpg
+				// 확인용 이미지 파일명 : parkby.jpg
+				
+				$("div#face").html("<img src='images/"+arrPerson[i].filename+"' />");
+			
+				html = "<ol>" +
+					          "<li>성명 :&nbsp;"+arrPerson[i].name+"</li>"+
+					          "<li>주소 :&nbsp;"+arrPerson[i].address+"</li>"+
+					          "<li>e메일 :&nbsp;"+arrPerson[i].email+"</li>"+
+					       "</ol>";
+				       
+				$("div#comment").html(html);
+				
+				$target.css({'background-color':'navy', 'color':'white'});
+
+				}, 
+				function(){
+					var $target = $(event.target); 
+					// 마우스가 올라가 있다가 빠져 나오는 엘리먼트 
+					
+					$target.css({'background-color':'yellow', 'color':'#ff0000'});	
+				
+			});// end of  $("span.buttons").hover(function(){})---------------------------
+		
+			// *** !!!!! 중요 !!!!! ***//
+		    /*
+		        선택자를 잡을때 선택자가 <body>태그에 직접 기술한 것이라면 선택자를 제대로 잡을수가 있으나
+		        스크립트내에서 기술한 것이라면 선택자를 못 잡아올수 있다.
+		        이러한 경우는 아래와 해야만 된다.
+		        $(document).on("이벤트종류", "선택자", function(){});  으로 한다.
+		    */
+		    /* == 아래의 방법으로는 선택자를 못 잡는다 ==
+			$("div#face > img").click(function(){
+				alert("사진을 클릭하셨군요~~");
+			});
+			*/
+			// !!! 그래서 아래와 같은 방법으로 선택자를 잡는다 !!!
+			$(document).on("click", "div#face > img", function(){
+				alert("사진을 클릭하셨군요~~");
+			});
+			
+			$(document).on("mouseover", "div#face > img", function(){
+				$(this).css({'opacity':'0.2', 'cursor':'default', 'border-radius':'0'});
+			});
+			
+			$(document).on("mouseout", "div#face > img", function(){
+				$(this).removeClass("image_custom");
+			});
+	});// end of $(document).ready(function(){})---------------------------------------------------
+
+</script>
+
+</head>
+<body>
+
+	<div id="container" align="center">
+		<div id="firstdiv"></div>
+		
+		<div id="seconddiv">
+			<div id="face"></div>
+			<div id="comment" align="left"></div>
+		</div>
+	</div>	
+	
+</body>
+</html>

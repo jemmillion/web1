@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>버튼을 클릭하면 색상이 나오는 것</title>
+<style type="text/css">
+
+	div#container {
+		/* border: solid 1px gray; */
+		width: 80%;
+		margin: 0 auto;
+	}	
+	
+	span.buttons {
+		display: inline-block;
+		width: 100px;
+		border: solid 2px orange;
+		background-color: yellow;
+		color: #ff0000;
+		font-size: 15pt;
+		cursor: pointer;
+		margin: 20px;
+		padding: 5px;
+	}
+	
+	div#comment {
+	 /* border: solid 1px gray; */ 
+		width: 250px;
+		margin-top: 10px;
+	}
+	
+	div#face > img {
+		width: 119px;
+		height: 149px;
+	}
+	
+	div#container {
+      /* border: solid 1px gray; */
+      
+      width: 90%;
+      margin: 0 auto;
+      padding: 2%;
+   }
+   
+   span#notice{
+   		background-color: navy;
+   		color: white;
+   		font-size: 20pt;
+   }
+   
+   button.btns{
+   		width: 100px;
+   		height: 50px;
+    	font-size: 20pt;
+   		margin-right: 20px;   		
+   }
+
+</style>
+
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script> 
+<script type="text/javascript">
+
+	$(function(){
+		var arrBtm = [{color:"red", hangul:"빨강"}
+							  ,{color:"orange", hangul:"주황"}
+							  ,{color:"yellow", hangul:"노랑"}
+							  ,{color:"green", hangul:"초록"}
+							  ,{color:"blue", hangul:"파랑"}
+							  ,{color:"navy", hangul:"남색"}
+							  ,{color:"purple", hangul:"보라"}];
+		
+		var html = "<span id='notice'>버튼을 눌러보세요</span>";
+		
+		arrBtn.forEach(function(item){
+			html += "<button type='button' class='btns'>"+item.color+"</button>";
+			
+		});
+		
+		$("div#btnsDiv").html(html);
+		
+		/*
+		$("div#btnsDiv > button").click(function(){
+			alert("버튼을 클릭하셨군요~~~");
+		});
+		*/
+		
+		$(document).on("click", "div#btnsDiv > button", function(event){
+			// alert("버튼을 클릭하셨군요~~~");
+			
+			
+			var $target = $(event.target);
+			var i = $("div#btnsDiv > button").index($(target));
+			console.log("인덱스 i => "+i);
+			
+			var index = $("div#btnsDiv > button").index($(this));
+		//	cosole.log("인덱스 index => "+index);
+		
+			var sColor = arrBtn[i].color;
+		
+			$("div#colorDiv").css({'width':'200px', 'height':'200px', 'background-color':sColor});
+			
+			// css 속성값이 1개뿐이라면 아래와 같이 해도 된다.
+			$("div#hangulDiv").html(arrBtn[i].hangul).css('color',sColor);
+			
+		});// end of
+		
+		$("div#btnsDiv > button").eq(0).trigger("click")
+	});
+
+</script>
+</head>
+<body>
+   <div id="container">
+      <div id="btnsDiv"></div>
+       <div id="colorDiv" class="answer"></div>
+       <div id="hangulDiv" class="answer"></div>
+   </div>
+</body>
+</html>
